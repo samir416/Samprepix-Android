@@ -1,9 +1,9 @@
 package com.example.samprepix;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -11,196 +11,351 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class activity_forgot extends AppCompatActivity {
 
-    EditText etemail, etnewpassword, etconfirmpassword;
-    Button reset;
-    TextView tvlogin, tvshowpassword;
-    LinearLayout passwordsection;
+    private EditText etEmail;
+    private EditText etNewPassword;
+    private EditText etConfirmPassword;
 
-    SharedPreferences preferences;
+    private Button btnReset;
+    private TextView btnBack;
+    private TextView tvShowPassword;
 
-    boolean passwordvisible = false;
+    private LinearLayout passSection;
+
+    private SharedPreferences userPreferences;
+
+    private boolean passwordVisible = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_forgot);
 
-        etemail = findViewById(R.id.et_email);
-        reset = findViewById(R.id.btn_reset);
-        tvlogin = findViewById(R.id.tv_login);
-        etnewpassword = findViewById(R.id.et_new_password);
-        etconfirmpassword = findViewById(R.id.et_confirm_password);
-        tvshowpassword = findViewById(R.id.tv_show_password);
-        passwordsection = findViewById(R.id.pass_section);
+        etEmail =
+                findViewById(R.id.et_email);
 
-        preferences = getSharedPreferences("user_data", MODE_PRIVATE);
+        etNewPassword =
+                findViewById(R.id.et_new_password);
 
-        reset.setOnClickListener(v -> {
+        etConfirmPassword =
+                findViewById(R.id.et_confirm_password);
 
-            if (passwordsection.getVisibility() == LinearLayout.GONE) {
+        btnReset =
+                findViewById(R.id.btn_reset);
 
-                String email = etemail.getText().toString().trim();
-                String savedEmail = preferences.getString("email", "");
+        btnBack =
+                findViewById(R.id.btn_back);
 
-                if (email.isEmpty()) {
+        tvShowPassword =
+                findViewById(R.id.tv_show_password);
 
-                    Toast.makeText(this,
-                            "Enter Email",
-                            Toast.LENGTH_SHORT).show();
+        passSection =
+                findViewById(R.id.pass_section);
 
-                    etemail.requestFocus();
+        userPreferences =
+                getSharedPreferences(
+                        "user_data",
+                        MODE_PRIVATE
+                );
 
-                } else if (!email.contains("@") || !email.contains(".")) {
+        String savedEmail =
+                userPreferences.getString(
+                        "email",
+                        ""
+                );
 
-                    Toast.makeText(this,
-                            "Enter a valid email",
-                            Toast.LENGTH_SHORT).show();
+        if (!savedEmail.isEmpty()) {
+            etEmail.setText(savedEmail);
+        }
 
-                    etemail.requestFocus();
+        btnBack.setOnClickListener(
+                v -> finish()
+        );
 
-                } else if (savedEmail.isEmpty()) {
+        getOnBackPressedDispatcher().addCallback(
+                this,
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        finish();
+                    }
+                }
+        );
 
-                    Toast.makeText(this,
-                            "No registered account found",
-                            Toast.LENGTH_SHORT).show();
+        tvShowPassword.setOnClickListener(
+                v -> togglePasswordVisibility()
+        );
 
-                    etemail.requestFocus();
+        btnReset.setOnClickListener(
+                v -> requestPasswordReset()
+        );
+    }
 
-                } else if (!email.equals(savedEmail)) {
+    private void requestPasswordReset() {
 
-                    Toast.makeText(this,
-                            "Email not registered",
-                            Toast.LENGTH_SHORT).show();
+        String email =
+                etEmail.getText()
+                        .toString()
+                        .trim();
 
-                    etemail.requestFocus();
+        if (email.isEmpty()) {
 
-                } else {
+            Toast.makeText(
+                    this,
+                    "Please enter your email address",
+                    Toast.LENGTH_SHORT
+            ).show();
 
-                    passwordsection.setVisibility(LinearLayout.VISIBLE);
-                    reset.setText("Update Password");
+            etEmail.requestFocus();
+            return;
+        }
 
-                    Toast.makeText(this,
-                            "Email verified",
-                            Toast.LENGTH_SHORT).show();
+        if (!email.contains("@") ||
+                !email.contains(".")) {
+
+            Toast.makeText(
+                    this,
+                    "Please enter a valid email address",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            etEmail.requestFocus();
+            return;
+        }
+
+        btnReset.setEnabled(false);
+        btnReset.setText("Sending...");
+
+        new Thread(() -> {
+
+            HttpURLConnection connection = null;
+
+            try {
+
+                URL url =
+                        new URL(
+                                ApiConfig.getBaseUrl()
+                                        + "/forgot-password"
+                        );
+
+                connection =
+                        (HttpURLConnection)
+                                url.openConnection();
+
+                connection.setRequestMethod("POST");
+                connection.setConnectTimeout(15000);
+                connection.setReadTimeout(20000);
+                connection.setDoOutput(true);
+                connection.setDoInput(true);
+
+                connection.setRequestProperty(
+                        "Content-Type",
+                        "application/json; charset=UTF-8"
+                );
+
+                connection.setRequestProperty(
+                        "Accept",
+                        "application/json"
+                );
+
+                JSONObject request =
+                        new JSONObject();
+
+                request.put(
+                        "email",
+                        email
+                );
+
+                OutputStream outputStream =
+                        connection.getOutputStream();
+
+                outputStream.write(
+                        request.toString()
+                                .getBytes("UTF-8")
+                );
+
+                outputStream.flush();
+                outputStream.close();
+
+                int responseCode =
+                        connection.getResponseCode();
+
+                InputStream inputStream =
+                        responseCode >= 200 &&
+                                responseCode < 300
+                                ? connection.getInputStream()
+                                : connection.getErrorStream();
+
+                StringBuilder response =
+                        new StringBuilder();
+
+                if (inputStream != null) {
+
+                    BufferedReader reader =
+                            new BufferedReader(
+                                    new InputStreamReader(
+                                            inputStream,
+                                            "UTF-8"
+                                    )
+                            );
+
+                    String line;
+
+                    while (
+                            (line = reader.readLine())
+                                    != null
+                    ) {
+                        response.append(line);
+                    }
+
+                    reader.close();
                 }
 
-            } else {
+                String responseText =
+                        response.toString();
 
-                String newPass =
-                        etnewpassword.getText().toString().trim();
+                if (responseCode >= 200 &&
+                        responseCode < 300) {
 
-                String Cnfpass =
-                        etconfirmpassword.getText().toString().trim();
+                    runOnUiThread(() -> {
 
-                if (newPass.isEmpty()) {
+                        btnReset.setEnabled(true);
+                        btnReset.setText("Reset Password");
 
-                    Toast.makeText(this,
-                            "Enter New Password",
-                            Toast.LENGTH_SHORT).show();
+                        Toast.makeText(
+                                activity_forgot.this,
+                                "Password reset instructions have been sent to your email.",
+                                Toast.LENGTH_LONG
+                        ).show();
 
-                    etnewpassword.requestFocus();
-
-                } else if (newPass.length() < 6) {
-
-                    Toast.makeText(this,
-                            "Password must be at least 6 characters",
-                            Toast.LENGTH_SHORT).show();
-
-                    etnewpassword.requestFocus();
-
-                } else if (Cnfpass.isEmpty()) {
-
-                    Toast.makeText(this,
-                            "Confirm Password",
-                            Toast.LENGTH_SHORT).show();
-
-                    etconfirmpassword.requestFocus();
-
-                } else if (!newPass.equals(Cnfpass)) {
-
-                    Toast.makeText(this,
-                            "Passwords do not match",
-                            Toast.LENGTH_SHORT).show();
-
-                    etconfirmpassword.requestFocus();
+                        passSection.setVisibility(
+                                LinearLayout.GONE
+                        );
+                    });
 
                 } else {
 
-                    SharedPreferences.Editor editor =
-                            preferences.edit();
+                    String message =
+                            "Unable to send password reset request.";
 
-                    editor.putString("password", newPass);
-                    editor.apply();
+                    try {
 
-                    Toast.makeText(this,
-                            "Password updated successfully",
-                            Toast.LENGTH_SHORT).show();
+                        if (
+                                responseText != null &&
+                                        responseText
+                                                .trim()
+                                                .startsWith("{")
+                        ) {
 
-                    startActivity(new Intent(
+                            JSONObject json =
+                                    new JSONObject(
+                                            responseText
+                                    );
+
+                            if (json.has("message")) {
+
+                                message =
+                                        json.getString(
+                                                "message"
+                                        );
+
+                            } else if (
+                                    json.has("error")
+                            ) {
+
+                                message =
+                                        json.getString(
+                                                "error"
+                                        );
+                            }
+                        }
+
+                    } catch (Exception ignored) {
+                    }
+
+                    final String finalMessage =
+                            message;
+
+                    runOnUiThread(() -> {
+
+                        btnReset.setEnabled(true);
+                        btnReset.setText("Reset Password");
+
+                        Toast.makeText(
+                                activity_forgot.this,
+                                finalMessage,
+                                Toast.LENGTH_LONG
+                        ).show();
+                    });
+                }
+
+            } catch (Exception e) {
+
+                runOnUiThread(() -> {
+
+                    btnReset.setEnabled(true);
+                    btnReset.setText("Reset Password");
+
+                    Toast.makeText(
                             activity_forgot.this,
-                            activity_login.class
-                    ));
+                            "Unable to connect right now. Please try again.",
+                            Toast.LENGTH_LONG
+                    ).show();
+                });
 
-                    finish();
+            } finally {
+
+                if (connection != null) {
+                    connection.disconnect();
                 }
             }
-        });
 
-        tvshowpassword.setOnClickListener(v -> {
+        }).start();
+    }
 
-            if (passwordvisible == false) {
+    private void togglePasswordVisibility() {
 
-                etnewpassword.setInputType(
-                        InputType.TYPE_CLASS_TEXT |
-                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                );
+        passwordVisible =
+                !passwordVisible;
 
-                etconfirmpassword.setInputType(
-                        InputType.TYPE_CLASS_TEXT |
-                                InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                );
+        int type =
+                passwordVisible
+                        ? android.text.InputType.TYPE_CLASS_TEXT |
+                          android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                        : android.text.InputType.TYPE_CLASS_TEXT |
+                          android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;
 
-                tvshowpassword.setText("Hide");
-                passwordvisible = true;
+        etNewPassword.setInputType(type);
+        etConfirmPassword.setInputType(type);
 
-            } else {
+        etNewPassword.setSelection(
+                etNewPassword.length()
+        );
 
-                etnewpassword.setInputType(
-                        InputType.TYPE_CLASS_TEXT |
-                                InputType.TYPE_TEXT_VARIATION_PASSWORD
-                );
+        etConfirmPassword.setSelection(
+                etConfirmPassword.length()
+        );
 
-                etconfirmpassword.setInputType(
-                        InputType.TYPE_CLASS_TEXT |
-                                InputType.TYPE_TEXT_VARIATION_PASSWORD
-                );
-
-                tvshowpassword.setText("Show");
-                passwordvisible = false;
-            }
-
-            etnewpassword.setSelection(
-                    etnewpassword.length()
-            );
-
-            etconfirmpassword.setSelection(
-                    etconfirmpassword.length()
-            );
-        });
-
-        tvlogin.setOnClickListener(v -> {
-
-            startActivity(new Intent(
-                    activity_forgot.this,
-                    activity_login.class
-            ));
-
-            finish();
-        });
+        tvShowPassword.setText(
+                passwordVisible
+                        ? "Hide"
+                        : "Show"
+        );
     }
 }

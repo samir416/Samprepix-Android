@@ -3,29 +3,32 @@ package com.example.samprepix;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class activity_onboarding2 extends AppCompatActivity {
 
-    LinearLayout levelBeginner;
-    LinearLayout levelIntermediate;
-    LinearLayout levelAdvanced;
+    private LinearLayout levelBeginner;
+    private LinearLayout levelIntermediate;
+    private LinearLayout levelAdvanced;
 
-    Button btnBack;
-    Button btnNext;
+    private Button btnBack;
+    private Button btnNext;
 
-    SharedPreferences preferences;
+    private SharedPreferences preferences;
 
-    String selectedLevel = "";
+    private String selectedLevel = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_onboarding2);
 
@@ -41,59 +44,59 @@ public class activity_onboarding2 extends AppCompatActivity {
                 MODE_PRIVATE
         );
 
-        levelBeginner.setOnClickListener(v -> {
-            selectedLevel = "Beginner";
-            selectLevel(levelBeginner);
-        });
+        loadSavedLevel();
 
-        levelIntermediate.setOnClickListener(v -> {
-            selectedLevel = "Intermediate";
-            selectLevel(levelIntermediate);
-        });
+        levelBeginner.setOnClickListener(
+                v -> selectLevel(
+                        levelBeginner,
+                        "Beginner"
+                )
+        );
 
-        levelAdvanced.setOnClickListener(v -> {
-            selectedLevel = "Advanced";
-            selectLevel(levelAdvanced);
-        });
+        levelIntermediate.setOnClickListener(
+                v -> selectLevel(
+                        levelIntermediate,
+                        "Intermediate"
+                )
+        );
 
-        btnBack.setOnClickListener(v -> {
-            finish();
-        });
+        levelAdvanced.setOnClickListener(
+                v -> selectLevel(
+                        levelAdvanced,
+                        "Advanced"
+                )
+        );
 
-        btnNext.setOnClickListener(v -> {
-
-            if (selectedLevel.isEmpty()) {
-
-                Toast.makeText(
-                        activity_onboarding2.this,
-                        "Select your experience level",
-                        Toast.LENGTH_SHORT
-                ).show();
-
-            } else {
-
-                SharedPreferences.Editor editor =
-                        preferences.edit();
-
-                editor.putString(
-                        "experience_level",
-                        selectedLevel
+        findViewById(R.id.tv_back)
+                .setOnClickListener(
+                        v -> goBack()
                 );
 
-                editor.apply();
+        btnBack.setOnClickListener(
+                v -> goBack()
+        );
 
-                Intent intent = new Intent(
-                        activity_onboarding2.this,
-                        activity_onboarding3.class
-                );
+        btnNext.setOnClickListener(
+                v -> goNext()
+        );
 
-                startActivity(intent);
-                finish();
-            }
-        });
+        getOnBackPressedDispatcher().addCallback(
+                this,
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        goBack();
+                    }
+                }
+        );
     }
 
-    private void selectLevel(LinearLayout selectedLayout) {
+    private void selectLevel(
+            LinearLayout selectedLayout,
+            String level
+    ) {
+
+        selectedLevel = level;
 
         levelBeginner.setBackgroundResource(
                 R.drawable.card_bg
@@ -110,5 +113,82 @@ public class activity_onboarding2 extends AppCompatActivity {
         selectedLayout.setBackgroundResource(
                 R.drawable.btn_outline
         );
+    }
+
+    private void loadSavedLevel() {
+
+        String savedLevel =
+                preferences.getString(
+                        "experience_level",
+                        ""
+                );
+
+        if (savedLevel.isEmpty()) {
+            return;
+        }
+
+        if (savedLevel.equalsIgnoreCase("Beginner")) {
+
+            selectLevel(
+                    levelBeginner,
+                    "Beginner"
+            );
+
+        } else if (savedLevel.equalsIgnoreCase("Intermediate")) {
+
+            selectLevel(
+                    levelIntermediate,
+                    "Intermediate"
+            );
+
+        } else if (savedLevel.equalsIgnoreCase("Advanced")) {
+
+            selectLevel(
+                    levelAdvanced,
+                    "Advanced"
+            );
+        }
+    }
+
+    private void goNext() {
+
+        if (selectedLevel.isEmpty()) {
+
+            Toast.makeText(
+                    this,
+                    "Select your experience level",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+        preferences.edit()
+                .putString(
+                        "experience_level",
+                        selectedLevel
+                )
+                .apply();
+
+        Intent intent =
+                new Intent(
+                        activity_onboarding2.this,
+                        activity_onboarding3.class
+                );
+
+        startActivity(intent);
+        finish();
+    }
+
+    private void goBack() {
+
+        Intent intent =
+                new Intent(
+                        activity_onboarding2.this,
+                        activity_onboarding1.class
+                );
+
+        startActivity(intent);
+        finish();
     }
 }

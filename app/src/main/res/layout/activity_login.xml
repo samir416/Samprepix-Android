@@ -1,200 +1,251 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_login"
     android:background="@color/bg_dark"
-    android:padding="24dp"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    tools:context=".activity_login">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:fillViewport="true"
+        android:scrollbars="none">
 
-        <ImageView
-            android:id="@+id/imgLogo"
-            android:layout_width="150dp"
-            android:layout_height="132dp"
-            android:layout_marginTop="20dp"
-            android:contentDescription="Samprepix Logo"
-            android:src="@drawable/Logo" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:text="Welcome Back"
-            android:textColorHint="@color/text"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="24dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="Login to your account"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/btn_back"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/icon_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:gravity="center"
+                    android:text="←"
+                    android:textColor="@color/text"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:id="@+id/et_email"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/input_bg"
-            android:hint="Email"
-            android:imeOptions="actionNext"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/text"
-            android:textColorHint="@color/muted"
-            android:textSize="14sp"
-            android:inputType="textEmailAddress"/>
+                <ImageView
+                    android:id="@+id/imgLogo"
+                    android:layout_width="34dp"
+                    android:layout_height="34dp"
+                    android:layout_marginStart="12dp"
+                    android:contentDescription="Samprepix Logo"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/logo" />
 
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/input_bg"
-            android:hint="Password"
-            android:imeOptions="actionDone"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textColor="@color/text"
-            android:textColorHint="@color/muted"
-            android:textSize="14sp"
-            android:inputType="textPassword" />
-        
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="4dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="Samprepix"
+                    android:textColor="@color/text"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
 
-            <CheckBox
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:text="Welcome Back"
+                android:textColor="@color/text"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Login to your account"
+                android:textColor="@color/text_dark"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_email"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="28dp"
+                android:background="@drawable/input_bg"
+                android:hint="Email"
+                android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:textColor="@color/text"
+                android:textColorHint="@color/muted"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/input_bg"
+                android:hint="Enter your password"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:singleLine="true"
+                android:textColor="@color/text"
+                android:textColorHint="@color/muted"
+                android:textSize="14sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="2dp">
+
+                <CheckBox
+                    android:id="@+id/cb_member"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:buttonTint="@color/primary"
+                    android:gravity="center_vertical"
+                    android:padding="0dp"
+                    android:text="Remember me"
+                    android:textColor="@color/text_dark"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_forgot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center_vertical"
+                    android:text="Forgot password?"
+                    android:textColor="@color/cyan"
+                    android:textSize="13sp" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/btn_bg"
+                android:gravity="center"
+                android:text="Login"
+                android:textAllCaps="false"
+                android:textColor="@color/text"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:gravity="center"
+                android:text="OR"
+                android:textColor="@color/muted"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:id="@+id/btn_google"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/btn_outline"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="Google"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/google" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Continue with Google"
+                    android:textColor="@color/text"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_github"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_outline"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="GitHub"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/github_logo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Continue with GitHub"
+                    android:textColor="@color/text"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_register"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:id="@+id/cb_member"
-                android:buttonTint="@color/primary"
-                android:text="Remember me"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="Don't have an account? Register"
                 android:textColor="@color/text_dark"
-                android:textSize="13sp"
-                />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:id="@+id/tv_forgot"
-            android:layout_alignParentEnd="true"
-            android:gravity="center"
-            android:text="Forgot Password?"
-            android:textColor="@color/cyan"
-            android:textSize="13sp"/>
-
-        </RelativeLayout>
-        
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:id="@+id/btn_login"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/btn_bg"
-            android:gravity="center"
-            android:text="Login"
-            android:textAllCaps="false"
-            android:textColor="@color/text"
-            android:textSize="14sp"
-            android:textStyle="bold"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:gravity="center"
-            android:text="OR"
-            android:textColor="@color/muted"
-            android:textSize="12sp"
-            />
-
-        <LinearLayout
-            android:id="@+id/btn_google"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@drawable/btn_outline"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/Google"
-                android:scaleType="centerInside"
-                android:contentDescription="Google" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Continue With Google"
-                android:textAllCaps="true"
-                android:textColor="@color/text"
-                android:textSize="14sp" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:text="Secured with JWT • 256-bit encryption"
+                android:textColor="@color/muted"
+                android:textSize="11sp" />
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:id="@+id/btn_github"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/btn_outline"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp">
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginEnd="10dp"
-                android:src="@drawable/Github_logo"
-                android:scaleType="centerInside"
-                android:contentDescription="GitHub" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Continue with GitHub"
-                android:textColor="@color/text"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_register"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:text="Don't have an account? Register"
-            android:textColor="@color/text_dark"
-            android:textSize="14sp" />
-
-    </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

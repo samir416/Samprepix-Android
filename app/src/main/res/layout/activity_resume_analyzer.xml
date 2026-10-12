@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity_resume_analyzer"
     android:background="@color/bg_dark"
-    android:padding="16dp"
-    android:fitsSystemWindows="true">
-    
+    android:fitsSystemWindows="true"
+    android:padding="22dp"
+    tools:context=".activity_resume_analyzer">
+
     <ScrollView
+        android:id="@+id/main_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/main_scroll"
         android:fillViewport="true"
-        android:scrollbars="vertical"
-        >
+        android:scrollbars="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,129 +25,191 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="72dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/btn_back"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/icon_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="←"
+                    android:textColor="@color/text"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
+
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/Logo"
-                    android:contentDescription="Samprepix Logo" />
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:layout_marginStart="8dp"
+                    android:contentDescription="Samprepix Logo"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/logo" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:paddingStart="8dp"
+                    android:paddingStart="4dp"
                     android:text="Samprepix"
                     android:textColor="@color/text"
-                    android:textSize="13sp"
+                    android:textSize="22sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/btn_menu"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/icon_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:text="☰"
                     android:textColor="@color/text"
-                    android:textSize="20sp" />
+                    android:textSize="23sp" />
+
             </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="Resume Analyzer"
                 android:textColor="@color/text"
-                android:textSize="22sp"
-                android:textStyle="bold"/>
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="7dp"
                 android:text="Get ATS score &amp; improve your resume"
                 android:textColor="@color/text_dark"
-                android:textSize="13sp" />
-            
+                android:textSize="15sp" />
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
                 android:id="@+id/upload_card"
-                android:layout_marginTop="22dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="280dp"
+                android:layout_marginTop="24dp"
                 android:background="@drawable/card_bg"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="20dp">
-                
+                android:padding="22dp">
+
                 <TextView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
                     android:gravity="center"
                     android:text="↑"
                     android:textColor="@color/purple"
-                    android:textSize="52sp"
-                    android:textStyle="bold"/>
-                
+                    android:textSize="58sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="10dp"
                     android:text="Upload Your Resume"
                     android:textColor="@color/text"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
-                
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
                 <TextView
+                    android:id="@+id/tv_upload_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="6dp"
                     android:text="PDF, DOCX (Max 5MB)"
                     android:textColor="@color/text_dark"
-                    android:textSize="13sp"/>
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/tv_selected_file"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:ellipsize="middle"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:textColor="@color/text"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/btn_choose_file"
-                    android:layout_width="180dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_width="200dp"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="18dp"
                     android:background="@drawable/btn_bg"
+                    android:gravity="center"
                     android:text="Choose File"
                     android:textAllCaps="false"
                     android:textColor="@color/text"
-                    android:textSize="14sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/btn_analyze"
+                    android:layout_width="200dp"
+                    android:layout_height="54dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/btn_outline"
+                    android:gravity="center"
+                    android:text="Analyze Resume"
+                    android:textAllCaps="false"
+                    android:textColor="@color/text"
+                    android:textSize="15sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/progress_analyze"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:indeterminate="true"
+                    android:visibility="gone" />
+
             </LinearLayout>
-            
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="28dp"
                 android:text="Recent Analyses"
                 android:textColor="@color/text"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-            
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <LinearLayout
+                android:id="@+id/recent_analyses"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recent_analyses"
-                android:layout_marginTop="12dp"
-                android:orientation="vertical"/>
+                android:layout_marginTop="14dp"
+                android:orientation="vertical" />
 
-             <TextView
-                 android:layout_width="match_parent"
-                 android:layout_height="wrap_content"
-                 android:layout_marginTop="20dp"
-                 android:gravity="center"
-                 android:text="No recent analyses"
-                 android:textColor="@color/muted"
-                 android:textSize="13sp"
-                 android:id="@+id/tv_no_recent"/>
-
+            <TextView
+                android:id="@+id/tv_no_recent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:gravity="center"
+                android:text="No recent analyses"
+                android:textColor="@color/muted"
+                android:textSize="14sp" />
 
         </LinearLayout>
+
     </ScrollView>
+
 </RelativeLayout>
